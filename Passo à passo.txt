@@ -1,0 +1,60 @@
+Obs: É utilizado o package "send2trash"
+
+1 - Esse é o script, salvo como "antivirus.py"
+
+import os
+import send2trash
+
+def scan_files(directory):
+    file_list = []
+
+    for root, dirs, files in os.walk(directory):
+        for file in files:
+            if file.endswith(('.bat', '.exe')):
+                file_path = os.path.join(root, file)
+                file_list.append(file_path)
+                print(f'File: {file}, Path: {file_path}')
+
+    return file_list
+
+def move_to_trash(file_list):
+    for file_path in file_list:
+        try:
+            send2trash.send2trash(file_path)
+            print(f'{os.path.basename(file_path)} moved to trash.')
+        except Exception as e:
+            print(f'Error moving {file_path} to trash: {e}')
+
+def main():
+    print("Bem-vindo ao AntivírusTop 4.0!")
+    directory_to_scan = input("Insira o caminho do diretório que deseja escanear: ")
+
+    # Validar se o diretório existe
+    if not os.path.exists(directory_to_scan):
+        print("Diretório não encontrado. Certifique-se de inserir um caminho válido.")
+        return
+
+    print("\nEscaneando arquivos...\n")
+    scanned_files = scan_files(directory_to_scan)
+
+    print(f"\n{len(scanned_files)} arquivo(s) encontrado(s):")
+    for file_path in scanned_files:
+        print(file_path)
+
+    move_to_trash_input = input("\nDeseja mover os arquivos .bat e .exe encontrados para a lixeira? (Sim/Não): ").lower()
+    
+    if move_to_trash_input == 'sim':
+        move_to_trash(scanned_files)
+        print("\nArquivos movidos para a lixeira.")
+    else:
+        print("\nNenhum arquivo foi movido para a lixeira.")
+
+if __name__ == "__main__":
+    main()
+
+
+2 - Usando o cmd, colar o diretório, executando, assim, o código.
+
+3 - Será requerido o nome do caminho à se analisar.
+
+4 - Decidir se deseja mover os arquivos a lixeira.
